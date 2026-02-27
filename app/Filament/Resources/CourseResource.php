@@ -62,10 +62,15 @@ class CourseResource extends Resource
                         }
                     })
                     ->dehydrateStateUsing(fn (mixed $state): mixed => $state instanceof CourseLevel ? $state->value : $state),
-                Forms\Components\TextInput::make('image_path')
-                    ->label('Image URL')
-                    ->maxLength(2048)
-                    ->url()
+                Forms\Components\FileUpload::make('image_path')
+                    ->label('Course image')
+                    ->disk('public')
+                    ->directory('courses')
+                    ->visibility('public')
+                    ->image()
+                    ->imageEditor()
+                    ->maxSize(2048)
+                    ->helperText('Upload an image (max 2MB). Stored on the public disk and served at /storage/*.')
                     ->nullable(),
                 Forms\Components\Select::make('status')
                     ->required()

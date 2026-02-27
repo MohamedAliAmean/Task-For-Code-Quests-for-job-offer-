@@ -35,4 +35,8 @@ if [[ "${RUN_MIGRATIONS:-false}" == "true" ]]; then
   php artisan migrate --force --no-interaction
 fi
 
+# Ensure public uploads volume is writable by PHP-FPM workers (www-data).
+mkdir -p storage/app/public
+chown -R www-data:www-data storage/app/public || true
+
 exec "$@"

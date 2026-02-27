@@ -81,4 +81,21 @@ class Course extends Model
             'published_at' => $publishedAt,
         ]);
     }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        $path = $this->image_path;
+
+        if (blank($path)) {
+            return null;
+        }
+
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
+        }
+
+        $path = ltrim($path, '/');
+
+        return "/storage/{$path}";
+    }
 }

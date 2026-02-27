@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: docker/app/Dockerfile
+    volumes:
+      - public-storage:/var/www/html/storage/app/public
     environment:
       APP_NAME: "Mini-LMS"
       APP_ENV: local
@@ -38,6 +40,8 @@ services:
       dockerfile: docker/web/Dockerfile
     ports:
       - "8080:80"
+    volumes:
+      - public-storage:/var/www/html/public/storage
     depends_on:
       - app
 
@@ -89,3 +93,4 @@ services:
 
 volumes:
   db-data:
+  public-storage:

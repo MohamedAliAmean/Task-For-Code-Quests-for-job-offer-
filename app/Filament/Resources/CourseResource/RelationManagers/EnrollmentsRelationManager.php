@@ -49,7 +49,11 @@ class EnrollmentsRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->disabled(fn (): bool => ! $this->getOwnerRecord()->isPublished())
+                    ->tooltip(fn (): ?string => $this->getOwnerRecord()->isPublished()
+                        ? null
+                        : 'Publish the course first, then enroll students.'),
             ])
             ->actions([
                 Tables\Actions\DeleteAction::make(),
@@ -61,4 +65,3 @@ class EnrollmentsRelationManager extends RelationManager
             ]);
     }
 }
-

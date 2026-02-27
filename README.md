@@ -33,6 +33,13 @@ After seeding (`docker compose exec app php artisan db:seed`):
 
 Only users with `role = admin` (or legacy `is_admin = 1`) can access the panel.
 
+## Course Images
+
+Courses support an uploaded image from the admin panel (drag & drop). Images are stored on the `public` disk and served from `/storage/*`.
+
+- Docker: uploads are available immediately.
+- Local (non-Docker): run `php artisan storage:link` once.
+
 ## Services
 
 - `app`: PHP-FPM Laravel app (runs migrations on startup)

@@ -42,7 +42,5 @@ RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framewor
 COPY docker/app/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-USER www-data
-
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["php-fpm"]

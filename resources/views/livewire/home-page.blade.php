@@ -14,9 +14,9 @@
                 class="group overflow-hidden rounded-lg border bg-white shadow-sm transition hover:shadow"
             >
                 <div class="aspect-video w-full bg-gray-100">
-                    @if ($course->image_path)
+                    @if ($course->image_url)
                         <img
-                            src="{{ $course->image_path }}"
+                            src="{{ $course->image_url }}"
                             alt="{{ $course->title }}"
                             class="h-full w-full object-cover"
                             loading="lazy"

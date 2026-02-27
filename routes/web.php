@@ -4,6 +4,7 @@ use App\Livewire\CertificateShowPage;
 use App\Livewire\CourseShowPage;
 use App\Livewire\HomePage;
 use App\Livewire\LessonShowPage;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomePage::class)->name('home');
@@ -19,7 +20,7 @@ Route::get('/certificates/{courseCertificate}', CertificateShowPage::class)
     ->middleware('auth')
     ->name('certificates.show');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
