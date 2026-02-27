@@ -1,0 +1,91 @@
+services:
+  app:
+    image: mini-lms-app
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    environment:
+      APP_NAME: "Mini-LMS"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8080
+      APP_KEY: base64:oPJuxvURnRO4VyRdB2dkRXduKkkF7ZpmWkbVZpzGpLo=
+
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: mini_lms
+      DB_USERNAME: mini_lms
+      DB_PASSWORD: secret
+
+      QUEUE_CONNECTION: database
+      CACHE_STORE: database
+      SESSION_DRIVER: database
+
+      MAIL_MAILER: log
+      MAIL_FROM_ADDRESS: hello@example.com
+      MAIL_FROM_NAME: "Mini-LMS"
+
+      RUN_MIGRATIONS: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    image: mini-lms-web
+    build:
+      context: .
+      dockerfile: docker/web/Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+
+  queue:
+    image: mini-lms-app
+    command: php artisan queue:work --sleep=1 --tries=3 --timeout=90
+    environment:
+      APP_NAME: "Mini-LMS"
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8080
+      APP_KEY: base64:oPJuxvURnRO4VyRdB2dkRXduKkkF7ZpmWkbVZpzGpLo=
+
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: mini_lms
+      DB_USERNAME: mini_lms
+      DB_PASSWORD: secret
+
+      QUEUE_CONNECTION: database
+      CACHE_STORE: database
+      SESSION_DRIVER: database
+
+      MAIL_MAILER: log
+      MAIL_FROM_ADDRESS: hello@example.com
+      MAIL_FROM_NAME: "Mini-LMS"
+
+      RUN_MIGRATIONS: "false"
+    depends_on:
+      - app
+      - db
+
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: mini_lms
+      MYSQL_USER: mini_lms
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  db-data:
