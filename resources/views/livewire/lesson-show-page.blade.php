@@ -38,9 +38,18 @@
                 x-data="plyrVideoPlayer()"
                 x-init="init(); return () => destroy()"
             >
-                <video x-ref="video" playsinline controls class="w-full">
-                    <source src="{{ $lesson->video_url }}" type="video/mp4" />
-                </video>
+                @if (in_array($lesson->video_provider, ['youtube', 'vimeo'], true) && $lesson->video_embed_id)
+                    <div
+                        class="aspect-video w-full"
+                        x-ref="video"
+                        data-plyr-provider="{{ $lesson->video_provider }}"
+                        data-plyr-embed-id="{{ $lesson->video_embed_id }}"
+                    ></div>
+                @else
+                    <video x-ref="video" playsinline controls class="w-full">
+                        <source src="{{ $lesson->video_playback_url }}" type="video/mp4" />
+                    </video>
+                @endif
             </div>
 
             @if ($isEnrolled)

@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\CourseResource\RelationManagers;
 
+use App\Models\Lesson;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Set;
 
 class LessonsRelationManager extends RelationManager
 {
@@ -22,7 +24,13 @@ class LessonsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('video_url')
                     ->label('Video URL')
                     ->required()
-                    ->maxLength(2048),
+                    ->maxLength(2048)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Set $set, ?string $state): void {
+                        $set('video_url', Lesson::normalizeVideoUrl($state));
+                    })
+                    ->url()
+                    ->helperText('Paste a YouTube/Vimeo URL (or an iframe snippet). The system will extract the iframe src automatically.'),
                 Forms\Components\Textarea::make('description')
                     ->rows(4)
                     ->columnSpanFull(),

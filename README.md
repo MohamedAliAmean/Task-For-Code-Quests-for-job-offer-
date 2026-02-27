@@ -7,7 +7,7 @@ Scalable Mini-LMS foundation built with Laravel 12 + Livewire v3 + Alpine.js + T
 - Public home: lists published courses (no N+1)
 - Auth + enrollment (idempotent, draft-protected)
 - Course page: ordered lessons + free previews
-- Lesson page: Plyr video + started/completed progress tracking
+- Lesson page: Plyr video (MP4 / YouTube / Vimeo) + started/completed progress tracking
 - Course completion: certificate (UUID) + completion email (async, once-only)
 
 ## Requirements
